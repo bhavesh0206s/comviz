@@ -26,24 +26,20 @@ export default function Modal({
                         aria-hidden="true"
                     ></div>
                     <div
-                        className="absolute left-1/4 top-1/4 transform translate-y-1/2 translate-x-1/2"
+                        className="absolute left-1/2 top-1/4 transform translate-y-0 -translate-x-1/2"
                         style={{ width: '27em', maxHeight: '80vh' }}
                     >
-                        <div className="rounded-lg flex justify-center items-cente">
-                            <div className="modal-box">
-                                <div className="flex flex-row justify-between pb-4">
-                                    <h3 className="font-bold text-lg">
-                                        {title}
-                                    </h3>
-                                    <CrossIcon
-                                        onClick={() => {
-                                            setIsOpen(false);
-                                            onClose();
-                                        }}
-                                    />
-                                </div>
-                                {children}
+                        <div className="rounded-lg bg-gray-700 p-4">
+                            <div className="flex flex-row justify-between pb-4">
+                                <h3 className="font-bold text-lg">{title}</h3>
+                                <CrossIcon
+                                    onClick={() => {
+                                        setIsOpen(false);
+                                        if (onClose) onClose();
+                                    }}
+                                />
                             </div>
+                            {children}
                         </div>
                     </div>
                 </div>

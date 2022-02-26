@@ -1,5 +1,6 @@
 import dynamic from 'next/dynamic';
 import { useState } from 'react';
+import Layout from 'src/components/Layout';
 import PhoneAuthModal from 'src/components/modal/PhoneAuthModal';
 
 import styles from 'src/styles/Home.module.css';
@@ -45,23 +46,18 @@ export default function Home() {
     ];
     const [editorValue, setEditorValue] = useState('');
     const [query, setQuery] = useState('');
-    const [openPhoneAuthModal, setOpenPhoneAuthModal] = useState(false);
+
     return (
-        <div className={styles.container}>
-            <PhoneAuthModal
-                isOpen={openPhoneAuthModal}
-                setIsOpen={setOpenPhoneAuthModal}
-            />
-            <h1 className="text-6xl font-bold">Comviz</h1>
-            <button onClick={() => setOpenPhoneAuthModal(true)} className="btn">
-                Open Phone Auth
-            </button>
-            <SqlEditor
-                setQuery={setQuery}
-                setValue={setEditorValue}
-                value={editorValue}
-            />
-            <BarGraph data={data} />
-        </div>
+        <Layout>
+            <div className={styles.container}>
+                <h1 className="text-6xl font-bold">Comviz</h1>
+                <SqlEditor
+                    setQuery={setQuery}
+                    setValue={setEditorValue}
+                    value={editorValue}
+                />
+                <BarGraph indexBy="day" data={data} />
+            </div>
+        </Layout>
     );
 }

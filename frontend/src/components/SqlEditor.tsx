@@ -19,9 +19,7 @@ export default function SqlEditor({ setQuery, value, setValue }) {
     };
 
     return (
-        <main
-            className={`col-start-2' col-end-3 row-start-2 row-end-3 mx-6 my-12 lg:mx-12`}
-        >
+        <main className={`py-5`}>
             <label htmlFor="editor">
                 <AceEditor
                     aria-label="editor"
@@ -46,7 +44,7 @@ export default function SqlEditor({ setQuery, value, setValue }) {
                     showLineNumbers
                 />
             </label>
-            <div>
+            <div className="pt-2">
                 <button onClick={onSubmit} className="btn">
                     <svg
                         xmlns="http://www.w3.org/2000/svg"
