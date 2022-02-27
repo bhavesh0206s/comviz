@@ -1,10 +1,12 @@
-import { useSession } from 'next-auth/react';
+import { signOut, useSession } from 'next-auth/react';
+import Link from 'next/link';
 import { useState } from 'react';
 import PhoneAuthModal from './modal/PhoneAuthModal';
 
 export default function Layout({ children }: { children: React.ReactNode }) {
     const { data: session } = useSession();
     const [openPhoneAuthModal, setOpenPhoneAuthModal] = useState(false);
+    console.log(session ? true : false);
     return (
         <div id="layout" className="">
             <PhoneAuthModal
@@ -12,10 +14,23 @@ export default function Layout({ children }: { children: React.ReactNode }) {
                 setIsOpen={setOpenPhoneAuthModal}
             />
             <header>
-                <div className="top-0 w-full z-10 bg-slate-700 bg-opacity-60 backdrop-filter backdrop-blur-lg">
-                    <div className="flex flex-row justify-between py-2 px-4 sm:px-16 lg:px-24 items-center ">
-                        <p className="text-2xl">Comviz</p>
-                        {session ? (
+                <div className="navbar bg-base-100 shadow-xl py-2 px-4 sm:px-16 lg:px-24">
+                    <div className="flex-1">
+                        <a className="btn btn-ghost normal-case text-xl">
+                            <Link href={'/'} passHref>
+                                <p className="text-2xl cursor-pointer">
+                                    Comviz
+                                </p>
+                            </Link>
+                        </a>
+                    </div>
+                    <div className="flex-none">
+                        <Link href={'/queries'} passHref>
+                            <button className="btn btn-primary mr-5">
+                                New Query
+                            </button>
+                        </Link>
+                        {!session ? (
                             <button
                                 className="btn btn-primary"
                                 onClick={() => setOpenPhoneAuthModal(true)}
@@ -23,17 +38,40 @@ export default function Layout({ children }: { children: React.ReactNode }) {
                                 login
                             </button>
                         ) : (
-                            <button
-                                className="btn btn-primary"
-                                onClick={() => setOpenPhoneAuthModal(true)}
-                            >
-                                logout
-                            </button>
+                            <div className="dropdown dropdown-end">
+                                <label
+                                    tabIndex="0"
+                                    className="btn btn-ghost btn-circle avatar"
+                                >
+                                    <div className="w-10 rounded-full">
+                                        <img src="https://api.lorem.space/image/face?hash=33791" />
+                                    </div>
+                                </label>
+                                <ul
+                                    tabIndex="0"
+                                    className="mt-3 p-2 shadow menu menu-compact dropdown-content bg-base-100 rounded-box w-52"
+                                >
+                                    <li>
+                                        <Link href={'/profile/3'} passHref>
+                                            <a className="justify-between">
+                                                Profile
+                                            </a>
+                                        </Link>
+                                    </li>
+                                    <li
+                                        onClick={() =>
+                                            signOut({ redirect: true })
+                                        }
+                                    >
+                                        <a>Logout</a>
+                                    </li>
+                                </ul>
+                            </div>
                         )}
                     </div>
                 </div>
             </header>
-            <main className="mt-2 px-4 sm:px-16 lg:px-24">{children}</main>
+            <main className=" px-4 sm:px-16 lg:px-24">{children}</main>
         </div>
     );
 }
