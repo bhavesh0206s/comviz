@@ -5,7 +5,7 @@ import Modal from './Modal';
 
 import { useRouter } from 'next/router';
 
-import { storeDashboards } from 'src/utils/storage';
+import { storeDashboard } from 'src/utils/storage';
 import { DashboardInterface } from 'src/types';
 
 export default function GraphSaveModal({
@@ -27,8 +27,9 @@ export default function GraphSaveModal({
     const onSubmit = async (e) => {
         e.preventDefault();
         setIsLoading(true);
+        const id = uuid();
         const queryPage: DashboardInterface = {
-            id: uuid(),
+            id,
             timestamp: new Date().getTime(),
             title: graphTitle,
             cover: 'https://api.lorem.space/image/album?w=150&h=150',
@@ -38,10 +39,11 @@ export default function GraphSaveModal({
         };
 
         try {
-            await storeDashboards(queryPage);
+            await storeDashboard(queryPage);
             const result = confirm('Go to dashboard');
             if (result) route.push(`/dashboard/${id}`);
         } catch (err) {
+            console.log(err);
             alert(
                 `Uh oh! Error encountered, we are looking in it. Please try after sometime.`,
             );

@@ -137,72 +137,74 @@ export default function Queries() {
                 data={data}
             />
             <Layout>
-                <SqlEditor
-                    setValue={setEditorValue}
-                    value={editorValue}
-                    onSubmit={onQuerySubmit}
-                />
-                <div className="mb-5 flex flex-row justify-between">
-                    <select
-                        onChange={handleChartChange}
-                        className="select w-full max-w-xs select-bordered"
-                    >
-                        {graphType(data).map((item, i) => (
-                            <option key={item} selected={i === 0}>
-                                {item}
-                            </option>
-                        ))}
-                    </select>
-                    {data && (
-                        <button onClick={onSave} className="btn ">
-                            Save
-                        </button>
+                <div className="min-h-screen">
+                    <SqlEditor
+                        setValue={setEditorValue}
+                        value={editorValue}
+                        onSubmit={onQuerySubmit}
+                    />
+                    <div className="mb-5 flex flex-row justify-between">
+                        <select
+                            onChange={handleChartChange}
+                            className="select w-full max-w-xs select-bordered"
+                        >
+                            {graphType(data).map((item, i) => (
+                                <option key={item} selected={i === 0}>
+                                    {item}
+                                </option>
+                            ))}
+                        </select>
+                        {data && (
+                            <button onClick={onSave} className="btn ">
+                                Save
+                            </button>
+                        )}
+                    </div>
+                    <div className="tabs tabs-boxed">
+                        <div onClick={() => setActiveTab('chart')}>
+                            <a
+                                className={`tab ${
+                                    activeTab === 'chart' ? 'tab-active' : ''
+                                }`}
+                            >
+                                Chart
+                            </a>
+                        </div>
+                        <div onClick={() => setActiveTab('data')}>
+                            <a
+                                className={`tab ${
+                                    activeTab === 'data' ? 'tab-active' : ''
+                                }`}
+                            >
+                                Data
+                            </a>
+                        </div>
+                    </div>
+
+                    {isValidQuery ? (
+                        <>
+                            {activeTab === 'chart' ? (
+                                <div className="bg-gray-100 p-10">
+                                    {renderChart()}
+                                </div>
+                            ) : (
+                                <DataTable data={data} />
+                            )}
+                        </>
+                    ) : (
+                        <div className="bg-gray-500 rounded-lg flex flex-col justify-center items-center p-5 h-44">
+                            {isFetching ? (
+                                <Loader color="text-white" />
+                            ) : (
+                                <p>
+                                    Write your SQL query above and then click
+                                    Run query. The results from your query will
+                                    show up here.
+                                </p>
+                            )}
+                        </div>
                     )}
                 </div>
-                <div className="tabs tabs-boxed">
-                    <div onClick={() => setActiveTab('chart')}>
-                        <a
-                            className={`tab ${
-                                activeTab === 'chart' ? 'tab-active' : ''
-                            }`}
-                        >
-                            Chart
-                        </a>
-                    </div>
-                    <div onClick={() => setActiveTab('data')}>
-                        <a
-                            className={`tab ${
-                                activeTab === 'data' ? 'tab-active' : ''
-                            }`}
-                        >
-                            Data
-                        </a>
-                    </div>
-                </div>
-
-                {isValidQuery ? (
-                    <>
-                        {activeTab === 'chart' ? (
-                            <div className="bg-gray-100 p-10">
-                                {renderChart()}
-                            </div>
-                        ) : (
-                            <DataTable data={data} />
-                        )}
-                    </>
-                ) : (
-                    <div className="bg-gray-500 rounded-lg flex flex-col justify-center items-center p-5">
-                        {isFetching ? (
-                            <Loader color="text-white" />
-                        ) : (
-                            <p>
-                                Write your SQL query above and then click Run
-                                query. The results from your query will show up
-                                here.
-                            </p>
-                        )}
-                    </div>
-                )}
             </Layout>
         </>
     );
