@@ -30,7 +30,7 @@ const fetchUri = async (url: string) => {
         } else if (data['nextUri']) {
             nextUri = data['nextUri'];
         } else if (data['error']) {
-            return { data: null, error: data['errror']['message'] };
+            return { data: null, error: data['error']['message'] };
         }
     }
 };

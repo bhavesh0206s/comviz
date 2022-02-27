@@ -1,6 +1,7 @@
 import axios from "axios";
 
-const URL = "http://localhost:8080/v1/statement/";
+// const URL = "http://localhost:8080/v1/statement/";
+const URL = "https://0d46-114-79-166-175.ngrok.io/v1/statement/";
 
 const fetchUri = async (url: string) => {
   let nextUri = url;
@@ -8,7 +9,13 @@ const fetchUri = async (url: string) => {
     const resp = await axios.get(nextUri);
     let data = resp.data;
     if (data["data"]) {
-      console.log("DATA\n", data["data"]);
+      const cols = data["columns"];
+      const rows = data["data"];
+      const info = {};
+      for (let i = 0; i < cols.length; i++) {
+        info[cols[i].name] = rows.map((item) => item[i]);
+      }
+      console.log(info);
       return;
     } else if (typeof data["nextUri"] === "string") {
       nextUri = data["nextUri"];
