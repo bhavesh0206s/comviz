@@ -19,6 +19,38 @@ const LineChart = dynamic(() => import('src/components/graphs/LineChart'), {
     ssr: false,
 });
 
+export const graphType = (data: { [key: string]: string[] | number[] }) => {
+    if (data) {
+        const columns = Object.keys(data);
+        const colLen = columns.length - 1;
+        if (colLen === 2) {
+            return ['Bar Chart', 'Line Chart', 'Pie Chart'];
+        } else {
+            return ['Bar Chart', 'Line Chart'];
+        }
+    } else {
+        return ['Bar Chart', 'Line Chart', 'Pie Chart'];
+    }
+};
+
+export const formatData = (data: any) => {
+    try {
+        const columns = Object.keys(data);
+        const rows = Object.values(data);
+        const formatedData = [];
+        for (let index = 0; index < data[columns[0]].length; index++) {
+            const obj = {};
+            rows.forEach((item, i) => {
+                obj[columns[i]] = data[columns[i]][index];
+            });
+            formatedData.push(obj);
+        }
+        return formatedData;
+    } catch (e) {
+        return [];
+    }
+};
+
 export default function Queries() {
     const [editorValue, setEditorValue] = useState('');
     const [query, setQuery] = useState('');
@@ -27,7 +59,7 @@ export default function Queries() {
     const [activeTab, setActiveTab] = useState('chart');
 
     const onQuerySubmit = () => {
-        console.log(query);
+        // console.log(query);
         setIsValidQuery(true);
     };
 
@@ -39,45 +71,25 @@ export default function Queries() {
         console.log('save');
     };
 
-    const data = [
-        {
-            day: 'Monday',
-            degress: 59,
-        },
-        {
-            day: 'Tuesday',
-            degress: 61,
-        },
-        {
-            day: 'Wednesday',
-            degress: 55,
-        },
-        {
-            day: 'Thursday',
-            degress: 78,
-        },
-        {
-            day: 'Friday',
-            degress: 71,
-        },
-        {
-            day: 'Saturday',
-            degress: 56,
-        },
-        {
-            day: 'Sunday',
-            degress: 67,
-        },
-    ];
+    const data = {
+        id: [1, 2, 3, 4],
+        state: ['gujarat', 'goa', 'delhi', 'test'],
+        price: [451, 45, 123, 456],
+        // users: [45656, 13212, 78979, 99999],
+    };
 
     const renderChart = () => {
-        switch (selectedChart) {
-            case 'Bar Chart':
-                return <BarGraph data={data} />;
-            case 'Pie Chart':
-                return <PieChart data={data} />;
-            case 'Line Chart':
-                return <LineChart data={data} />;
+        if (data) {
+            switch (selectedChart) {
+                case 'Bar Chart':
+                    return <BarGraph data={formatData(data)} />;
+                case 'Pie Chart':
+                    return <PieChart data={formatData(data)} />;
+                case 'Line Chart':
+                    return <LineChart data={formatData(data)} />;
+            }
+        } else {
+            return null;
         }
     };
 
@@ -94,9 +106,11 @@ export default function Queries() {
                         onChange={handleChartChange}
                         className="select w-full max-w-xs select-bordered"
                     >
-                        <option selected>Bar Chart</option>
-                        <option>Line Chart</option>
-                        <option>Pie Chart</option>
+                        {graphType(data).map((item, i) => (
+                            <option key={item} selected={i === 0}>
+                                {item}
+                            </option>
+                        ))}
                     </select>
                     <button onClick={onSave} className="btn ">
                         Save
@@ -144,7 +158,4 @@ export default function Queries() {
             </Layout>
         </>
     );
-}
-function setActiveTab(arg0: string): void {
-    throw new Error('Function not implemented.');
 }

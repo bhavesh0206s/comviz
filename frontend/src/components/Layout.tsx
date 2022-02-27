@@ -6,7 +6,7 @@ import PhoneAuthModal from './modal/PhoneAuthModal';
 export default function Layout({ children }: { children: React.ReactNode }) {
     const { data: session } = useSession();
     const [openPhoneAuthModal, setOpenPhoneAuthModal] = useState(false);
-    console.log(session ? true : false);
+
     return (
         <div id="layout" className="">
             <PhoneAuthModal
@@ -72,7 +72,7 @@ export default function Layout({ children }: { children: React.ReactNode }) {
                 </div>
             </header>
             <main className=" px-4 sm:px-16 lg:px-24">{children}</main>
-            <footer className="mt-24 p-10 footer bg-primary text-primary-content footer-center">
+            <footer className="relative bottom-0 w-full mt-24 p-10  bg-primary text-primary-content footer-center">
                 <div>
                     <p className="text-7xl font-bold">Comvix</p>
                     <p>Copyright © 2022 - All right reserved</p>

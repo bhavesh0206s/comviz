@@ -1,11 +1,4 @@
-export default function DataTable({ data }: { data: any }) {
-    try {
-        const x = data.map((item) => Object.values(item)[0]);
-        const y = data.map((item) => Object.values(item)[1]);
-        const xLabel = data.map((item) => Object.keys(item)[0])[0];
-        const yLabel = data.map((item) => Object.keys(item)[1])[1];
-    } catch (e) {}
-
+export default function DataTable({ data }: { data: any[] }) {
     try {
         return (
             <div className=" h-96 w-full overflow-y-auto py-4">
@@ -13,17 +6,17 @@ export default function DataTable({ data }: { data: any }) {
                     <table className="table w-full">
                         <thead className="sticky top-0">
                             <tr>
-                                <th></th>
-                                <th>{xLabel}</th>
-                                <th>{yLabel}</th>
+                                {Object.keys(data).map((item) => (
+                                    <th key={item}>{item}</th>
+                                ))}
                             </tr>
                         </thead>
                         <tbody>
-                            {x.map((item, i) => (
+                            {data[Object.keys(data)[0]].map((item, i) => (
                                 <tr key={i}>
-                                    <th>{i + 1}</th>
-                                    <td>{item}</td>
-                                    <td>{y[i]}</td>
+                                    {Object.keys(data).map((ele) => (
+                                        <td key={item}>{data[ele][i]}</td>
+                                    ))}
                                 </tr>
                             ))}
                         </tbody>

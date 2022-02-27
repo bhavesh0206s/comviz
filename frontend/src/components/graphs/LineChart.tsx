@@ -10,6 +10,7 @@ import {
     Legend,
 } from 'chart.js';
 import { Line } from 'react-chartjs-2';
+import { generateDataset } from './BarGraph';
 
 ChartJS.register(
     CategoryScale,
@@ -21,7 +22,7 @@ ChartJS.register(
     Legend,
 );
 
-export default function LineChart({ data }: { data: any }) {
+export default function LineChart({ data }: { data: any[] }) {
     const options = {
         responsive: true,
         legend: { display: false },
@@ -34,14 +35,8 @@ export default function LineChart({ data }: { data: any }) {
     return (
         <Line
             data={{
-                labels: data.map((item) => Object.values(item)[0]),
-                datasets: [
-                    {
-                        label: data.map((item) => Object.keys(item)[0])[1],
-                        data: data.map((item) => Object.values(item)[1]),
-                        backgroundColor: 'rgba(53, 162, 235, 0.5)',
-                    },
-                ],
+                labels: data.map((item) => Object.values(item)[1]),
+                datasets: generateDataset(data),
             }}
             options={options}
             height="300px"
