@@ -1,12 +1,47 @@
 import dynamic from 'next/dynamic';
 import Link from 'next/link';
 import { useState } from 'react';
+
 import Layout from 'src/components/Layout';
 import PhoneAuthModal from 'src/components/modal/PhoneAuthModal';
+
+const BarGraph = dynamic(() => import('src/components/graphs/BarGraph'), {
+    ssr: false,
+});
 
 import styles from 'src/styles/Home.module.css';
 
 export default function Home() {
+    const data = [
+        {
+            day: 'Monday',
+            degress: 59,
+        },
+        {
+            day: 'Tuesday',
+            degress: 61,
+        },
+        {
+            day: 'Wednesday',
+            degress: 55,
+        },
+        {
+            day: 'Thursday',
+            degress: 78,
+        },
+        {
+            day: 'Friday',
+            degress: 71,
+        },
+        {
+            day: 'Saturday',
+            degress: 56,
+        },
+        {
+            day: 'Sunday',
+            degress: 67,
+        },
+    ];
     return (
         <Layout>
             <div className={styles.container}>

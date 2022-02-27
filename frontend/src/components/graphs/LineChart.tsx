@@ -1,22 +1,27 @@
+import React from 'react';
 import {
     Chart as ChartJS,
     CategoryScale,
     LinearScale,
-    BarElement,
+    PointElement,
+    LineElement,
     Title,
     Tooltip,
     Legend,
 } from 'chart.js';
-import { Bar } from 'react-chartjs-2';
+import { Line } from 'react-chartjs-2';
+
 ChartJS.register(
     CategoryScale,
     LinearScale,
-    BarElement,
+    PointElement,
+    LineElement,
     Title,
     Tooltip,
     Legend,
 );
-export default function BarGraph({ data }: { data: any[] }) {
+
+export default function LineChart({ data }: { data: any }) {
     const options = {
         responsive: true,
         legend: { display: false },
@@ -26,12 +31,8 @@ export default function BarGraph({ data }: { data: any[] }) {
 
         maintainAspectRatio: false,
     };
-
     return (
-        <Bar
-            options={options}
-            height="400px"
-            width="200px"
+        <Line
             data={{
                 labels: data.map((item) => Object.values(item)[0]),
                 datasets: [
@@ -42,6 +43,9 @@ export default function BarGraph({ data }: { data: any[] }) {
                     },
                 ],
             }}
+            options={options}
+            height="300px"
+            width="300px"
         />
     );
 }

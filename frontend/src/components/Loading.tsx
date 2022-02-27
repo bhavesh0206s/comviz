@@ -7,7 +7,7 @@ export default function Loading({
 }) {
     return (
         <div
-            className="fixed inset-0 w-full h-full"
+            className="fixed inset-0 w-full h-full rounded-lg"
             style={{ background, zIndex: 1000000 }}
         >
             <div className="absolute left-2/4 top-2/4  transform -translate-x-2/4 -translate-y-2/4">
@@ -28,7 +28,7 @@ export function Loader({
 }) {
     return (
         <div
-            className={` flex justify-center items-center space-x-1 text-sm ${color} ${className}`}
+            className={` flex justify-center items-center space-x-1 text-sm ${color} ${className} `}
         >
             <svg
                 fill="none"

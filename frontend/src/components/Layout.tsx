@@ -72,6 +72,12 @@ export default function Layout({ children }: { children: React.ReactNode }) {
                 </div>
             </header>
             <main className=" px-4 sm:px-16 lg:px-24">{children}</main>
+            <footer className="mt-24 p-10 footer bg-primary text-primary-content footer-center">
+                <div>
+                    <p className="text-7xl font-bold">Comvix</p>
+                    <p>Copyright © 2022 - All right reserved</p>
+                </div>
+            </footer>
         </div>
     );
 }

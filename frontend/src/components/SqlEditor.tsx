@@ -5,18 +5,18 @@ import 'ace-builds/src-min-noconflict/mode-mysql';
 import 'ace-builds/src-noconflict/theme-github';
 import 'ace-builds/src-noconflict/ace';
 
-export default function SqlEditor({ setQuery, value, setValue }) {
+export default function SqlEditor({ value, setValue, onSubmit }) {
     const onChange = (newValue: string) => {
         setValue(newValue);
     };
 
-    const onSubmit = () => {
-        const Z = value
-            .toLowerCase()
-            .slice(value.indexOf('from') + 'from'.length);
-        console.log(Z.split(' ')[1]);
-        setQuery(Z.split(' ')[1]);
-    };
+    // const onSubmit = () => {
+    //     const Z = value
+    //         .toLowerCase()
+    //         .slice(value.indexOf('from') + 'from'.length);
+    //     console.log(Z.split(' ')[1]);
+    //     setQuery(Z.split(' ')[1]);
+    // };
 
     return (
         <main className={`py-5`}>

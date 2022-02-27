@@ -4,7 +4,7 @@ import Layout from 'src/components/Layout';
 export default function Dashboard() {
     return (
         <Layout>
-            <p className="text-xl pb-2">Dashboard</p>
+            <p className="text-xl py-4">Dashboard</p>
             <ul className="menu bg-gray-800 menu-compact lg:menu-normal p-2 rounded-box">
                 <li>
                     <div>
