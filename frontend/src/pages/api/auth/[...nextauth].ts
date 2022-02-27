@@ -1,6 +1,8 @@
 import NextAuth from 'next-auth';
 import Credentials from 'next-auth/providers/credentials';
 import axios from 'axios';
+import { PrismaAdapter } from '@next-auth/prisma-adapter';
+import prisma from '../../../lib/prisma';
 import type { NextApiRequest, NextApiResponse } from 'next';
 import Cookies from 'cookies';
 
@@ -35,17 +37,17 @@ const Auth = (req: NextApiRequest, res: NextApiResponse) => {
         events: {
             async signOut() {
                 // deletes jwt token of django backend
-                cookies.set('customerLoggedIn');
+                // cookies.set('customerLoggedIn');
             },
         },
         callbacks: {
             async jwt({ token, user }) {
-                if (user?.access_token) {
-                    token.access_token = user.access_token;
-                }
-                if (user?.username) {
-                    token.username = user.username;
-                }
+                // if (user?.access_token) {
+                //     token.access_token = user.access_token;
+                // }
+                // if (user?.username) {
+                //     token.username = user.username;
+                // }
                 return token;
             },
             async session({ session, token }) {
@@ -62,6 +64,7 @@ const Auth = (req: NextApiRequest, res: NextApiResponse) => {
                 return session;
             },
         },
+        adapter: PrismaAdapter(prisma),
         providers: [
             Credentials({
                 id: 'phone-login',
@@ -72,33 +75,27 @@ const Auth = (req: NextApiRequest, res: NextApiResponse) => {
                 },
                 async authorize(credentials) {
                     try {
-                        const response = await axios.post(
-                            `${BACKEND}/api/accounts/customer/login/phone/web/`,
-                            {
-                                phone: credentials['phone'],
-                                firebase_uid: credentials['firebase_uid'],
+                        let user = await prisma.user.findUnique({
+                            where: {
+                                phone: credentials.phone,
                             },
-                        );
-                        const tokens = response.data.tokens;
-                        const username = response.data.username;
-
-                        cookies.set('customerLoggedIn', 'true', {
-                            sameSite: 'lax',
-                            httpOnly: false,
-                            overwrite: true,
-                            expires: date,
                         });
-
+                        if (!user)
+                            user = await prisma.user.create({
+                                data: {
+                                    phone: credentials.phone,
+                                    firebase_uid: credentials['firebase_uid'],
+                                    // username: credentials.username,
+                                },
+                            });
+                        console.log(user);
                         return {
-                            access_token: tokens.access,
-                            username,
-                            email: response.data.email,
+                            // access_token: tokens.access,
+                            // username: user?.username,
+                            phone: user?.phone,
                         };
                     } catch (err) {
-                        throw new Error(
-                            Object.values(err.response.data)[0] ||
-                                'Login Failed',
-                        );
+                        throw new Error('');
                     }
                 },
             }),

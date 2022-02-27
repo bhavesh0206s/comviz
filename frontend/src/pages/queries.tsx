@@ -72,9 +72,24 @@ export default function Queries() {
     };
 
     const data = {
-        id: [1, 2, 3, 4],
-        state: ['gujarat', 'goa', 'delhi', 'test'],
-        price: [451, 45, 123, 456],
+        id: [1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11],
+        brand: [
+            'Xiaomi',
+            'Samsung',
+            'Vivo',
+            'Oppo',
+            'Realme',
+            'Apple',
+            'Motorola',
+            'OnePlus',
+            'Lenovo',
+            'Huawei',
+            'Other',
+        ],
+        count: [
+            16416511, 12943051, 8365074, 8365074, 3165738, 2326897, 2099718,
+            1890141, 1627153, 1104740, 7462707,
+        ],
         // users: [45656, 13212, 78979, 99999],
     };
 
