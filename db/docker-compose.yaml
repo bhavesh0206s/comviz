@@ -31,7 +31,10 @@ services:
     image: trinodb/trino
     container_name: trino
     volumes:
-      - ./catalog:/etc/catalog
+      - ./trino/catalog:/etc/trino/catalog
+      - ./trino/password.db:/etc/trino/password.db
+      - ./trino/password-authenticator.properties:/etc/trino/password-authenticator.properties
+      - ./trino/config.properties:/etc/trino/config.properties
     ports:
       - 8080:8080
     depends_on:
