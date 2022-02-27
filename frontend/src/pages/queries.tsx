@@ -1,7 +1,9 @@
+import axios from 'axios';
 import dynamic from 'next/dynamic';
 import { ChangeEvent, useState } from 'react';
 import DataTable from 'src/components/DataTable';
 import Layout from 'src/components/Layout';
+import { Loader } from 'src/components/Loading';
 
 const SqlEditor = dynamic(() => import('src/components/SqlEditor'), {
     ssr: false,
@@ -22,7 +24,7 @@ const LineChart = dynamic(() => import('src/components/graphs/LineChart'), {
 export const graphType = (data: { [key: string]: string[] | number[] }) => {
     if (data) {
         const columns = Object.keys(data);
-        const colLen = columns.length - 1;
+        const colLen = columns.length;
         if (colLen === 2) {
             return ['Bar Chart', 'Line Chart', 'Pie Chart'];
         } else {
@@ -45,6 +47,7 @@ export const formatData = (data: any) => {
             });
             formatedData.push(obj);
         }
+        console.log(formatedData);
         return formatedData;
     } catch (e) {
         return [];
@@ -57,10 +60,20 @@ export default function Queries() {
     const [isValidQuery, setIsValidQuery] = useState(false);
     const [selectedChart, setSelectedChart] = useState('Bar Chart');
     const [activeTab, setActiveTab] = useState('chart');
+    const [isFetching, setIsFetching] = useState(false);
+    const [data, setData] = useState();
 
-    const onQuerySubmit = () => {
-        // console.log(query);
-        setIsValidQuery(true);
+    const onQuerySubmit = async () => {
+        setIsFetching(true);
+        try {
+            const res = await axios.get(
+                `/api/db?query=${editorValue.replaceAll(';', ' ')}`,
+            );
+            console.log(res.data);
+            setData(res.data.data);
+            setIsValidQuery(true);
+        } catch (error) {}
+        setIsFetching(false);
     };
 
     const handleChartChange = (event: ChangeEvent<HTMLSelectElement>) => {
@@ -71,27 +84,26 @@ export default function Queries() {
         console.log('save');
     };
 
-    const data = {
-        id: [1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11],
-        brand: [
-            'Xiaomi',
-            'Samsung',
-            'Vivo',
-            'Oppo',
-            'Realme',
-            'Apple',
-            'Motorola',
-            'OnePlus',
-            'Lenovo',
-            'Huawei',
-            'Other',
-        ],
-        count: [
-            16416511, 12943051, 8365074, 8365074, 3165738, 2326897, 2099718,
-            1890141, 1627153, 1104740, 7462707,
-        ],
-        // users: [45656, 13212, 78979, 99999],
-    };
+    // const data = {
+    //     brand: [
+    //         'Xiaomi',
+    //         'Samsung',
+    //         'Vivo',
+    //         'Oppo',
+    //         'Realme',
+    //         'Apple',
+    //         'Motorola',
+    //         'OnePlus',
+    //         'Lenovo',
+    //         'Huawei',
+    //         'Other',
+    //     ],
+    //     count: [
+    //         16416511, 12943051, 8365074, 8365074, 3165738, 2326897, 2099718,
+    //         1890141, 1627153, 1104740, 7462707,
+    //     ],
+    //     // users: [45656, 13212, 78979, 99999],
+    // };
 
     const renderChart = () => {
         if (data) {
@@ -164,10 +176,15 @@ export default function Queries() {
                     </>
                 ) : (
                     <div className="bg-gray-500 rounded-lg flex flex-col justify-center items-center p-5">
-                        <p>
-                            Write your SQL query above and then click Run query.
-                            The results from your query will show up here.
-                        </p>
+                        {isFetching ? (
+                            <Loader color="text-white" />
+                        ) : (
+                            <p>
+                                Write your SQL query above and then click Run
+                                query. The results from your query will show up
+                                here.
+                            </p>
+                        )}
                     </div>
                 )}
             </Layout>

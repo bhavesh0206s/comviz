@@ -24,10 +24,10 @@ export const generateDataset = (data: any[]) => {
         try {
             const formatedData = [];
 
-            for (let index = 0; index < len - 2; index++) {
+            for (let index = 0; index < len - 1; index++) {
                 const obj = {
-                    label: data.map((item) => Object.keys(item)[index + 1])[1],
-                    data: data.map((item) => Object.values(item)[index + 2]),
+                    label: data.map((item) => Object.keys(item)[index])[1],
+                    data: data.map((item) => Object.values(item)[index + 1]),
                     backgroundColor: getRandomColor(),
                 };
                 formatedData.push(obj);
@@ -64,7 +64,7 @@ export default function BarGraph({ data }: { data: any[] }) {
             height="400px"
             width="200px"
             data={{
-                labels: data.map((item) => Object.values(item)[1]),
+                labels: data.map((item) => Object.values(item)[0]),
                 datasets: generateDataset(data),
             }}
         />
