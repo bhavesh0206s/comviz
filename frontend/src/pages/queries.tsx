@@ -4,6 +4,7 @@ import { ChangeEvent, useState } from 'react';
 import DataTable from 'src/components/DataTable';
 import Layout from 'src/components/Layout';
 import { Loader } from 'src/components/Loading';
+import GraphSaveModal from 'src/components/modal/GraphSaveModal';
 
 const SqlEditor = dynamic(() => import('src/components/SqlEditor'), {
     ssr: false,
@@ -63,13 +64,15 @@ export default function Queries() {
     const [isFetching, setIsFetching] = useState(false);
     const [data, setData] = useState();
 
+    const [openSaveModal, setOpenSaveModal] = useState(false);
+
     const onQuerySubmit = async () => {
         setIsFetching(true);
         try {
             const res = await axios.get(
                 `/api/db?query=${editorValue.replaceAll(';', ' ')}`,
             );
-            console.log(res.data);
+            setQuery(editorValue);
             setData(res.data.data);
             setIsValidQuery(true);
         } catch (error) {}
@@ -82,6 +85,7 @@ export default function Queries() {
 
     const onSave = () => {
         console.log('save');
+        setOpenSaveModal(true);
     };
 
     // const data = {
@@ -122,6 +126,12 @@ export default function Queries() {
 
     return (
         <>
+            <GraphSaveModal
+                isOpen={openSaveModal}
+                setIsOpen={setOpenSaveModal}
+                query={query}
+                data={data}
+            />
             <Layout>
                 <SqlEditor
                     setValue={setEditorValue}

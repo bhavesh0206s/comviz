@@ -3,7 +3,7 @@
 
 datasource db {
   provider = "postgresql"
-  url      = "postgresql://bhavesh@localhost:5432/comviz?schema=public"
+  url      = "postgresql://bhavesh:bhavesh@localhost:5432/comviz?schema=public"
 }
 
 generator client {
