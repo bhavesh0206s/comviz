@@ -11,7 +11,8 @@ type Catalog = 'mongodb';
 
 const CATALOGS = ['mongodb'];
 
-const URL = 'http://localhost:8080/v1/statement/';
+// const URL = 'http://localhost:8080/v1/statement/';
+const URL = 'https://0d46-114-79-166-175.ngrok.io/v1/statement/';
 
 const fetchUri = async (url: string) => {
     let nextUri = url;
@@ -19,11 +20,17 @@ const fetchUri = async (url: string) => {
         const resp = await axios.get(nextUri);
         const data = resp.data;
         if (data['data']) {
-            return { data: data['data'], error: null };
+            const cols = data['columns'];
+            const rows = data['data'];
+            const info = {};
+            for (let i = 0; i < cols.length; i++) {
+                info[cols[i].name] = rows.map((item) => item[i]);
+            }
+            return { data: info, error: null };
         } else if (data['nextUri']) {
             nextUri = data['nextUri'];
         } else if (data['error']) {
-            return { data: null, error: data['errror'] };
+            return { data: null, error: data['errror']['message'] };
         }
     }
 };
