@@ -25,11 +25,13 @@ export default function PieChart({ data }: { data: any }) {
     return (
         <Pie
             data={{
-                labels: data.map((item) => Object.values(item)[1]),
+                labels: [
+                    ...new Set(data.map((item) => Object.values(item)[0])),
+                ],
                 datasets: [
                     {
-                        label: data.map((item) => Object.keys(item)[1])[1],
-                        data: data.map((item) => Object.values(item)[2]),
+                        label: data.map((item) => Object.keys(item)[0])[1],
+                        data: data.map((item) => Object.values(item)[1]),
                         backgroundColor: data.map((item) => getRandomColor()),
                     },
                 ],

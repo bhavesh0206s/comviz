@@ -35,7 +35,9 @@ export default function LineChart({ data }: { data: any[] }) {
     return (
         <Line
             data={{
-                labels: data.map((item) => Object.values(item)[1]),
+                labels: [
+                    ...new Set(data.map((item) => Object.values(item)[0])),
+                ],
                 datasets: generateDataset(data),
             }}
             options={options}

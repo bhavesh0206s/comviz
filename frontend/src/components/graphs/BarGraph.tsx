@@ -64,7 +64,9 @@ export default function BarGraph({ data }: { data: any[] }) {
             height="400px"
             width="200px"
             data={{
-                labels: data.map((item) => Object.values(item)[0]),
+                labels: [
+                    ...new Set(data.map((item) => Object.values(item)[0])),
+                ],
                 datasets: generateDataset(data),
             }}
         />

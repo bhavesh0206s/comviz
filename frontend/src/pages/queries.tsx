@@ -68,13 +68,17 @@ export default function Queries() {
 
     const onQuerySubmit = async () => {
         setIsFetching(true);
+        setIsValidQuery(false);
         try {
-            const res = await axios.get(
-                `/api/db?query=${editorValue.replaceAll(';', ' ')}`,
-            );
-            setQuery(editorValue);
-            setData(res.data.data);
-            setIsValidQuery(true);
+            if (editorValue.length > 1) {
+                const res = await axios.get(
+                    `/api/db?query=${editorValue.replaceAll(';', ' ')}`,
+                );
+
+                setQuery(editorValue);
+                setData(res.data.data);
+                setIsValidQuery(true);
+            }
         } catch (error) {}
         setIsFetching(false);
     };
@@ -149,9 +153,11 @@ export default function Queries() {
                             </option>
                         ))}
                     </select>
-                    <button onClick={onSave} className="btn ">
-                        Save
-                    </button>
+                    {data && (
+                        <button onClick={onSave} className="btn ">
+                            Save
+                        </button>
+                    )}
                 </div>
                 <div className="tabs tabs-boxed">
                     <div onClick={() => setActiveTab('chart')}>
