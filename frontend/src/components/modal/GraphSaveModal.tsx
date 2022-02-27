@@ -1,8 +1,12 @@
-import axios from 'axios';
 import { useState } from 'react';
 import { v4 as uuid } from 'uuid';
 import Loading from '../Loading';
 import Modal from './Modal';
+
+import { useRouter } from 'next/router';
+
+import { storeDashboards } from 'src/utils/storage';
+import { DashboardInterface } from 'src/types';
 
 export default function GraphSaveModal({
     isOpen,
@@ -15,14 +19,37 @@ export default function GraphSaveModal({
     query: string;
     data: any[];
 }) {
+    const route = useRouter();
     const [isLoading, setIsLoading] = useState(false);
     const [username, setUsername] = useState('');
     const [graphTitle, setGraphTitle] = useState('');
-    const onSubmit = async () => {
+
+    const onSubmit = async (e) => {
+        e.preventDefault();
         setIsLoading(true);
-        console.log({ query, id: uuid(), data, username, graphTitle });
+        const queryPage: DashboardInterface = {
+            id: uuid(),
+            timestamp: new Date().getTime(),
+            title: graphTitle,
+            cover: 'https://api.lorem.space/image/album?w=150&h=150',
+            username: username,
+            query: query,
+            data: data,
+        };
+
+        try {
+            await storeDashboards(queryPage);
+            const result = confirm('Go to dashboard');
+            if (result) route.push(`/dashboard/${id}`);
+        } catch (err) {
+            alert(
+                `Uh oh! Error encountered, we are looking in it. Please try after sometime.`,
+            );
+        }
+
         setIsLoading(false);
     };
+
     return (
         <Modal title="Save your work" isOpen={isOpen} setIsOpen={setIsOpen}>
             <div className="form-control w-full">
